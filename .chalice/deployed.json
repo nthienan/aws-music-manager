@@ -1,0 +1,12 @@
+{
+  "dev": {
+    "api_handler_name": "music-manager-dev",
+    "api_handler_arn": "arn:aws:lambda:us-east-1:122739383757:function:music-manager-dev",
+    "lambda_functions": {},
+    "backend": "api",
+    "chalice_version": "1.0.3",
+    "rest_api_id": "bxae6rw9vf",
+    "api_gateway_stage": "api",
+    "region": "us-east-1"
+  }
+}

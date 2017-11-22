@@ -1,0 +1,13 @@
+{
+  "version": "2.0",
+  "app_name": "music-manager",
+  "stages": {
+    "dev": {
+      "autogen_policy": false,
+      "api_gateway_stage": "api"
+    }
+  },
+  "tags": {
+    "Application": "music-manager"
+  }
+}
