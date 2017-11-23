@@ -13,6 +13,15 @@ def index():
     return {'hello': 'world'}
 
 
+@app.route('/{user_id}/song')
+def get_all_song(user_id):
+    try:
+        songs = Song.query(Song.owner.contains(user_id))
+        return [{'id': s.id, 'name': s.name} for s in songs]
+    except Exception as e:
+        app.log.error('error occurred during create song %s' % e)
+
+
 @app.route('/song', methods=['POST'])
 def create_song():
     data = app.current_request.json_body
@@ -43,3 +52,13 @@ def upload_to_s3(file_name):
         app.log.error('error occurred during upload %s' % e)
         return Response(message='upload failed %s' % e,
                         headers={'Content-Type': 'text/plain'}, status_code=400)
+
+
+@app.route('/table/song', methods=['POST'])
+def create_table():
+    try:
+        if not Song.exists():
+            Song.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)
+        return "OK"
+    except Exception as e:
+        app.log.error('error occurred during create table %s' % e)
