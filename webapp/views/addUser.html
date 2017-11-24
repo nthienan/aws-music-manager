@@ -1,0 +1,125 @@
+<div id="signupbox" class="mainbox col-md-12 col-sm-12">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<div class="panel-title">{{'Account.AddUser' | translate}}</div>
+		</div>
+		<div class="panel-body">
+			<form id="signupform" name="signupform" class="form-horizontal"
+				role="form" ng-submit="createUser()">
+				
+				<div class="form-group has-feedback" ng-class="{'has-success' : signupform.email.$valid, 'has-error' : signupform.email.$invalid && signupform.email.$dirty}">
+					<label for="email" class="col-md-3 control-label">{{'Account.Email' | translate}}</label>
+						<div class="col-md-9">
+							<input type="email" class="form-control" name="email" placeholder="{{'Account.Email' | translate}}"
+								ng-model="regisUser.email" ng-minlength="3" required>
+							<p ng-show="signupform.email.$error.required && signupform.email.$dirty" class="help-block error-text">{{'Message.Required' | translate}}</p>
+							<p ng-show="signupform.email.$error.email" class="help-block error-text">{{'Message.Invalid' | translate}}</p>
+						</div>
+				</div>
+
+				<div class="form-group has-feedback"
+					ng-class="{'has-success' : signupform.username.$valid, 'has-error' : signupform.username.$invalid && signupform.username.$dirty}">
+					<label for="username" class="col-md-3 control-label">{{'Account.Username' | translate}}</label>
+					<div class="col-md-9">
+						<input type="text" class="form-control" name="username"
+							placeholder="{{'Account.Username' | translate}}" ng-model="regisUser.username"
+							ng-minlength="3" required>
+						<p ng-show="signupform.username.$error.required && signupform.username.$dirty"
+							class="help-block error-text">{{'Message.Required' | translate}}</p>
+						<p ng-show="signupform.username.$error.minlength"
+							class="help-block error-text">{{'Message.UsernameTooShort' | translate}}</p>
+					</div>
+				</div>
+
+				<div class="form-group has-feedback"
+					ng-class="{'has-success' : signupform.fullname.$valid, 'has-error' : signupform.fullname.$invalid && signupform.fullname.$dirty}">
+					<label for="fullname" class="col-md-3 control-label">{{'Account.Name' | translate}}</label>
+					<div class="col-md-9">
+						<input type="text" class="form-control" name="fullname"
+							placeholder="{{'Account.Name' | translate}}" ng-model="regisUser.fullName" required>
+						<p ng-show="signupform.fullname.$error.required && signupform.fullname.$dirty"
+							class="help-block error-text">{{'Message.Required' | translate}}</p>
+					</div>
+				</div>
+
+				<div class="form-group has-feedback"
+					ng-class="{'has-success' : signupform.password.$valid, 'has-error' : signupform.password.$invalid && signupform.password.$dirty}">
+					<label for="password" class="col-md-3 control-label">{{'Account.Password' | translate}}</label>
+					<div class="col-md-9">
+						<input type="password" class="form-control" id="password"
+							name="password" placeholder="{{'Account.Password' | translate}}" ng-model="password"
+							required ng-minlength="6">
+						<p
+							ng-show="signupform.password.$error.required && signupform.password.$dirty"
+							class="help-block error-text">{{'Message.Required' | translate}}</p>
+						<p ng-show="signupform.password.$error.minlength"
+							class="help-block error-text">{{'Message.PassTooShort' | translate}}</p>
+					</div>
+				</div>
+
+				<div class="form-group has-feedback"
+					ng-class="{'has-success' : signupform.passwordverify.$valid, 'has-error' : signupform.passwordverify.$invalid && signupform.passwordverify.$dirty}">
+					<label for="passwordverify" class="col-md-3 control-label">{{'Account.PassVerify' | translate}}</label>
+					<div class="col-md-9">
+						<input type="password" class="form-control" id="passwordverify"
+							name="passwordverify" placeholder="{{'Account.PassVerify' | translate}}"
+							ng-model="passwordVerify" required pw-check="password">
+						<p ng-show="signupform.passwordverify.$error.required && signupform.passwordverify.$dirty"
+							class="help-block error-text">{{'Message.Required' | translate}}</p>
+						<p ng-show="signupform.passwordverify.$error.pwmatch"
+							class="help-block error-text">{{'Account.PassNotMatch' | translate}}</p>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="roles" class="col-md-3 control-label">{{'Account.Role' | translate}}</label>
+					<div class="col-md-9">
+						<label class="checkbox-inline"> 
+							<input type="checkbox" id="ROLE_USER" value="ROLE_USER" checked="checked" disabled>
+							ROLE_USER &nbsp;&nbsp;
+						</label> 
+						<label class="checkbox-inline"> 
+							<input type="checkbox" id="ROLE_ADMIN" value="ROLE_ADMIN" ng-click="selectRole('ROLE_ADMIN')"> ROLE_ADMIN
+							&nbsp;&nbsp;
+						</label>
+					</div>
+				</div>
+				
+				<div class="form-group has-feedback">
+					<label for="passwordverify" class="col-md-3 control-label">{{'Account.Avatar' | translate}}</label>
+					<div class="col-md-9">
+						<div class="fileinput fileinput-new" data-provides="fileinput">
+							<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+							<div>
+								<span class="btn-file">
+									<span class="btn btn-success btn-sm fileinput-new" style="boder-color: none">{{'Account.Button.SelectAvatar' | translate}}</span>
+									<span class="btn btn-success btn-sm fileinput-exists">{{'Account.Button.ChangeAvatar' | translate}}</span>
+									<input type="file" name="file" required>
+								</span>
+								<button class="btn btn-danger btn-sm fileinput-exists" data-dismiss="fileinput">{{'Account.Button.RemoveAvatar' | translate}}</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-md-offset-3 col-md-9">
+						<button id="btn-signup" type="submit" class="btn btn-primary" ng-disabled="signupform.$invalid">
+							<i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;&nbsp;{{'Button.Save' | translate}}
+						</button>
+
+						<button type="button" class="btn btn-success" ng-click="showList()">
+							<i class="glyphicon glyphicon-circle-arrow-left"></i>&nbsp;&nbsp;{{'Button.Back' | translate}}
+						</button>
+					</div>
+				</div>
+
+				<div class="alert alert-danger" role="alert" ng-show="haveError">
+					<span class="glyphicon glyphicon-exclamation-sign"
+						aria-hidden="true"></span> <span class="sr-only">Error:</span>{{error}}
+				</div>
+
+			</form>
+		</div>
+	</div>
+</div>
