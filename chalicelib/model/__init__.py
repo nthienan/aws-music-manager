@@ -1,16 +1,8 @@
 import uuid
 
-from pynamodb.attributes import UnicodeAttribute
+from pynamodb.attributes import UnicodeAttribute, BooleanAttribute, UTCDateTimeAttribute
 from pynamodb.indexes import AllProjection, LocalSecondaryIndex
 from pynamodb.models import Model
-
-
-class OwnerIndex(LocalSecondaryIndex):
-    class Meta:
-        projection = AllProjection()
-
-    id = UnicodeAttribute(hash_key=True)
-    owner = UnicodeAttribute(range_key=True)
 
 
 class Song(Model):
@@ -19,10 +11,9 @@ class Song(Model):
 
     id = UnicodeAttribute(hash_key=True)
     owner = UnicodeAttribute()
-    name = UnicodeAttribute(range_key=True)
-    genre = UnicodeAttribute()
-    file = UnicodeAttribute()
-    owner_index = OwnerIndex()
+    name = UnicodeAttribute()
+    genre = UnicodeAttribute(null=True)
+    file = UnicodeAttribute(null=True)
 
     @classmethod
     def uuid(cls):
@@ -33,6 +24,15 @@ class User(Model):
     class Meta:
         table_name = 'mm-user'
 
-    name = UnicodeAttribute(range_key=True)
     email = UnicodeAttribute(hash_key=True)
+    name = UnicodeAttribute()
     password = UnicodeAttribute()
+
+
+class Token(Model):
+    class Meta:
+        table_name = 'mm-token'
+
+    token = UnicodeAttribute(hash_key=True)
+    valid = BooleanAttribute(default=False)
+    create_at = UTCDateTimeAttribute()
