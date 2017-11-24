@@ -36,7 +36,3 @@ class User(Model):
     name = UnicodeAttribute(range_key=True)
     email = UnicodeAttribute(hash_key=True)
     password = UnicodeAttribute()
-
-    @classmethod
-    def uuid(cls):
-        return 'u-%s' % str(uuid.uuid4()).replace('-', '')[:6]

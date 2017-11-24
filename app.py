@@ -74,7 +74,6 @@ def create_user():
     try:
         data = app.current_request.json_body
         u = User(**data)
-        u.id = User.uuid()
         encoder = hashlib.md5()
         encoder.update(u.password.encode('utf8'))
         u.password = encoder.hexdigest()
@@ -88,7 +87,7 @@ def create_user():
 def get_user(id):
     try:
         users = User.query(id)
-        return [{'id': u.id, 'name': u.name, 'email': u.email} for u in users]
+        return [{'name': u.name, 'email': u.email} for u in users]
     except Exception as e:
         app.log.error('%s' % e)
 
