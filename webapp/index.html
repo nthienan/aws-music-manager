@@ -5,7 +5,7 @@
 	<title>Music Manager</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	
+
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="resources/css/jasny-bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="resources/css/styles.css" />
@@ -90,7 +90,7 @@
 					</ul>
 					<ul class="list-unstyled hidden-xs" id="sidebar-footer">
 						<li><a href=""><h4>{{'Main.Title' | translate}}</h4> <i
-								class="glyphicon glyphicon-music"></i> {{'Main.Thesis' | translate}}</a></li>
+								class="glyphicon glyphicon-music"></i> {{'Main.Author' | translate}}</a></li>
 					</ul>
 
 					<!-- tiny only nav-->
@@ -178,8 +178,8 @@
 							<ul class="nav navbar-nav navbar-right" style="margin-right: 5px">
 								<li class="dropdown">
 									<a href="" class="dropdown-toggle" data-toggle="dropdown" style="padding: 5px !important">
-										<img src="{{$root.authenticated ? $root.user.image : image/avartar.png}}" alt="125x125" 
-											height="40px" width="55px" style="border-radius: 3px">
+										<img src="image/avartar.png" alt="125x125"
+											height="35px" width="35px" style="border-radius: 3px">
 										{{$root.authenticated ? $root.user.fullName : ""}}
 									</a>
 									<ul class="dropdown-menu">
