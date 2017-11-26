@@ -23,29 +23,29 @@ UNAUTHORIZED_RESPONSE = Response(body={'message': 'Unauthorized'}, status_code=4
 ##########
 @app.route('/song/{id}', cors=True)
 def get_song_by_id(id):
-    if 'X-Token' not in app.current_request.headers.keys() or not token.is_valid_token(
-            app.current_request.headers['X-Token']):
+    if 'Authorization' not in app.current_request.headers.keys() or not token.is_valid_token(
+            app.current_request.headers['Authorization']):
         return UNAUTHORIZED_RESPONSE
     s = Song.get(id)
-    return {'id': s.id, 'name': s.name}
+    return {'id': s.id, 'name': s.name, 'shared': s.shared}
 
 
 @app.route('/song', methods=['POST'], cors=True)
 def create_song():
-    if 'X-Token' not in app.current_request.headers.keys() or not token.is_valid_token(
-            app.current_request.headers['X-Token']):
+    if 'Authorization' not in app.current_request.headers.keys() or not token.is_valid_token(
+            app.current_request.headers['Authorization']):
         return UNAUTHORIZED_RESPONSE
     data = app.current_request.json_body
     s = Song(**data)
     s.id = Song.uuid()
     s.save()
-    return {'id': s.id, 'name': s.name}
+    return {'id': s.id, 'name': s.name, 'file': s.file, 'shared': s.shared, 'owner': s.owner}
 
 
 @app.route('/{user_id}/song', cors=True)
 def get_song_by_user(user_id):
-    if 'X-Token' not in app.current_request.headers.keys() or not token.is_valid_token(
-            app.current_request.headers['X-Token']):
+    if 'Authorization' not in app.current_request.headers.keys() or not token.is_valid_token(
+            app.current_request.headers['Authorization']):
         return UNAUTHORIZED_RESPONSE
     songs = Song.scan(Song.owner.startswith(user_id))
     return [{'id': s.id, 'name': s.name} for s in songs]
@@ -55,8 +55,8 @@ def get_song_by_user(user_id):
            content_types=['application/octet-stream'], cors=True)
 def upload_to_s3(user_id):
     try:
-        if 'X-Token' not in app.current_request.headers.keys() or not token.is_valid_token(
-                app.current_request.headers['X-Token']):
+        if 'Authorization' not in app.current_request.headers.keys() or not token.is_valid_token(
+                app.current_request.headers['Authorization']):
             return UNAUTHORIZED_RESPONSE
         body = app.current_request.raw_body
         file_name = str(uuid.uuid4())
@@ -87,10 +87,24 @@ def create_user():
     return u
 
 
+@app.route('/user/me', cors=True)
+def create_user():
+    try:
+        if 'Authorization' not in app.current_request.headers.keys() or not token.is_valid_token(
+                app.current_request.headers['Authorization']):
+            return UNAUTHORIZED_RESPONSE
+        info = token.extract_info(app.current_request.headers['Authorization'])
+        u = User.get(info['email'])
+        return {'email': u.email, 'name': u.name}
+    except (DoesNotExist, Exception) as e:
+        app.log.warn(e)
+        return Response(body={'message': 'Token is invalid'}, headers=DEFAULT_HEADERS)
+
+
 @app.route('/user/{id}', cors=True)
 def get_user(id):
-    if 'X-Token' not in app.current_request.headers.keys() or not token.is_valid_token(
-            app.current_request.headers['X-Token']):
+    if 'Authorization' not in app.current_request.headers.keys() or not token.is_valid_token(
+            app.current_request.headers['Authorization']):
         return UNAUTHORIZED_RESPONSE
     users = User.query(id)
     return [{'name': u.name, 'email': u.email} for u in users]
@@ -118,10 +132,10 @@ def login():
 @app.route('/logout', cors=True)
 def logout():
     try:
-        if 'X-Token' not in app.current_request.headers.keys() or not token.is_valid_token(
-                app.current_request.headers['X-Token']):
+        if 'Authorization' not in app.current_request.headers.keys() or not token.is_valid_token(
+                app.current_request.headers['Authorization']):
             return UNAUTHORIZED_RESPONSE
-        t = Token.get(app.current_request.headers['X-Token'])
+        t = Token.get(app.current_request.headers['Authorization'])
         t.valid = False
         t.save()
     except (DoesNotExist, Exception) as e:

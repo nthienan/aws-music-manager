@@ -17,16 +17,25 @@ def generate_token(email):
 
 
 def verify_token(token):
-    raw_data = token.split(':')
-    if not utils.md5(raw_data[0]) == raw_data[1]:
+    token_info = extract_info(token)
+    if not utils.md5(token_info['raw_token']) == token_info['signature']:
         raise Exception('The token is invalid.')
+    if utc() > token_info['expired_time']:
+        raise Exception('The token has expired.')
+
+
+def extract_info(token):
+    if ':' not in token:
+        raise Exception('The token is invalid.')
+    raw_data = token.split(':')
+    result = {'raw_token': raw_data[0], 'signature': raw_data[1]}
     plain_text = decode(SECRET_KEY, raw_data[0])
     if ':' not in plain_text:
         raise Exception('The token is invalid.')
     text_split = plain_text.split(':')
-    expired_time_stamp = int(text_split[1])
-    if utc() > expired_time_stamp:
-        raise Exception('The token has expired.')
+    result['email'] = text_split[0]
+    result['expired_time'] = int(text_split[1])
+    return result
 
 
 def is_valid_token(token):

@@ -14,6 +14,7 @@ class Song(Model):
     name = UnicodeAttribute()
     genre = UnicodeAttribute(null=True)
     file = UnicodeAttribute(null=True)
+    shared = BooleanAttribute(default=False)
 
     @classmethod
     def uuid(cls):
