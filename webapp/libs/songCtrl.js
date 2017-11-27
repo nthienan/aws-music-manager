@@ -2,7 +2,8 @@
  * @author nthienan
  */
 // song controller
-mainApp.controller('songCtrl', function ($rootScope, $scope, $http, $location, $filter, ngProgress, $translate, langService, globalConfig) {
+mainApp.controller('songCtrl', function ($rootScope, $scope, $http, $location, $filter, ngProgress,
+                                         $translate, langService, globalConfig, $window) {
         $scope.selectedId = [];
         $http.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -52,7 +53,7 @@ mainApp.controller('songCtrl', function ($rootScope, $scope, $http, $location, $
                 var f = new Uint8Array(reader.result);
                 $http({
                     method: 'POST',
-                    url: globalConfig.baseURL + '/song/upload',
+                    url: globalConfig.baseURL + '/' + $rootScope.user.email + '/upload',
                     headers: {'Content-Type': "application/octet-stream"},
                     data: f,
                     transformRequest: []
@@ -106,15 +107,7 @@ mainApp.controller('songCtrl', function ($rootScope, $scope, $http, $location, $
 
         // play
         $scope.playSong = function (id) {
-            ngProgress.start();
-            $http.put('/api/song/' + id + '/view')
-                .success(function (data) {
-                    ngProgress.complete();
-                    $location.path('/play-song/' + id);
-                })
-                .error(function (data, status) {
-                    ngProgress.complete();
-                });
+            $location.path('/play-song/' + id);
         };
 
         // push or splice selected id
@@ -133,6 +126,11 @@ mainApp.controller('songCtrl', function ($rootScope, $scope, $http, $location, $
 
         $scope.back = function () {
             $location.path('/');
+        };
+
+        // download file
+        $scope.downloadSong = function (path) {
+            $window.open('/' + path, '_blank');
         };
 
         $scope.$on('langBroadcast', function () {

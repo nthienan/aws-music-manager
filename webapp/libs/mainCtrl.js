@@ -9,17 +9,17 @@ mainApp.controller('mainCtrl', function ($rootScope, $scope, $http, $location, $
 
     // search
     $scope.search = function () {
-        if ($scope.keyword !== '') {
-            $http.get('/api/song/' + $rootScope.user.username + '/search?keyword=' + $scope.keyword + '&size=' + $rootScope.pageSize)
-                .success(function (data) {
-                    $rootScope.songResponse = data.response;
-                });
-        } else {
-            $http.get('/api/song/' + $rootScope.user.username + '/search?keyword=' + $scope.keyword + '&size=' + $rootScope.pageSize + '&page=' + ($rootScope.pageNumber - 1))
-                .success(function (data) {
-                    $rootScope.songResponse = data.response;
-                });
-        }
+        // if ($scope.keyword !== '') {
+        //     $http.get('/api/song/' + $rootScope.user.username + '/search?keyword=' + $scope.keyword + '&size=' + $rootScope.pageSize)
+        //         .success(function (data) {
+        //             $rootScope.songResponse = data.response;
+        //         });
+        // } else {
+        //     $http.get('/api/song/' + $rootScope.user.username + '/search?keyword=' + $scope.keyword + '&size=' + $rootScope.pageSize + '&page=' + ($rootScope.pageNumber - 1))
+        //         .success(function (data) {
+        //             $rootScope.songResponse = data.response;
+        //         });
+        // }
     };
 
     // redirect to list view

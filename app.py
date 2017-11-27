@@ -27,7 +27,7 @@ def get_song_by_id(id):
             app.current_request.headers['Authorization']):
         return UNAUTHORIZED_RESPONSE
     s = Song.get(id)
-    return {'id': s.id, 'name': s.name, 'shared': s.shared}
+    return {'id': s.id, 'name': s.name, 'file': s.file, 'shared': s.shared, 'owner': s.owner, 'genre': s.genre}
 
 
 @app.route('/song', methods=['POST'], cors=True)
@@ -39,7 +39,7 @@ def create_song():
     s = Song(**data)
     s.id = Song.uuid()
     s.save()
-    return {'id': s.id, 'name': s.name, 'file': s.file, 'shared': s.shared, 'owner': s.owner}
+    return {'id': s.id, 'name': s.name, 'file': s.file, 'shared': s.shared, 'owner': s.owner, 'genre': s.genre}
 
 
 @app.route('/{user_id}/song', cors=True)
@@ -48,7 +48,8 @@ def get_song_by_user(user_id):
             app.current_request.headers['Authorization']):
         return UNAUTHORIZED_RESPONSE
     songs = Song.scan(Song.owner.startswith(user_id))
-    return [{'id': s.id, 'name': s.name} for s in songs]
+    return [{'id': s.id, 'name': s.name, 'file': s.file, 'shared': s.shared, 'owner': s.owner, 'genre': s.genre} for s
+            in songs]
 
 
 @app.route('/{user_id}/upload', methods=['POST'],
@@ -98,7 +99,7 @@ def create_user():
         return {'email': u.email, 'name': u.name}
     except (DoesNotExist, Exception) as e:
         app.log.warn(e)
-        return Response(body={'message': 'Token is invalid'}, headers=DEFAULT_HEADERS)
+        return Response(body={'message': 'Token is invalid'}, headers=DEFAULT_HEADERS, status_code=401)
 
 
 @app.route('/user/{id}', cors=True)

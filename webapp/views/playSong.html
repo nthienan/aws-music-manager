@@ -2,7 +2,7 @@
 	<source src="/music/turntable-video.mp4" type="video/mp4">
 	<img id="turntable-static-video" src="resources/image/turntable-loop-poster.jpg" alt="" style="width:100%; max-width:1920px" />
 </video> 
-<audio id="turntable-audio" autoplay="" controls style="width: 100%" src="{{song.path}}"></audio>
+<audio id="turntable-audio" autoplay="" controls style="width: 100%" src="{{song.file}}"></audio>
 <div class="row">
 	<div class="col-md-6" style="padding:0">
 		<div class="table-responsive">
@@ -10,28 +10,20 @@
 				<tbody>
 					<tr>
 						<td class="col-md-1" style="border: none"><span class="glyphicon glyphicon-music"></span></td>
-						<td class="col-md-11" style="border: none"><b>{{song.name}} - {{song.gener}}</b></td>
-					</tr>
-					<tr>
-						<td class="col-md-1" style="border: none"><span class="glyphicon glyphicon-pencil"></span></td>
-						<td class="col-md-11" style="border: none"><b>{{song.musician}}</b></td>
-					</tr>
-					<tr>
-						<td class="col-md-1" style="border: none"><span class="glyphicon glyphicon-user"></span></td>
-						<td class="col-md-11" style="border: none"><b>{{song.artist}}</b></td>
+						<td class="col-md-11" style="border: none"><b>{{song.name}} - {{song.genre}}</b></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 	<div class="col-md-6">
-		<button class="btn btn-default btn-xs pull-right" ng-click="downloadSong(song.id)">
+		<button class="btn btn-default btn-xs pull-right" ng-click="downloadSong(song.file)">
 			<span class="glyphicon glyphicon-download-alt"></span> {{'Button.Download' | translate}}
-			<span class="badge">{{song.download}}</span>
+			<span class="badge">2.944</span>
 		</button>
 		<button class="btn btn-default btn-xs pull-right">
 			<span class="glyphicon glyphicon-equalizer"></span> {{'Button.Listen' | translate}}
-			<span class="badge">{{song.view}}</span>
+			<span class="badge">293.288</span>
 		</button>
 	</div>
 </div>
