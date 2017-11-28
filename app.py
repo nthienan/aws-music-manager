@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 
 import boto3
-from chalice import Chalice, Response
+from chalice import Chalice, Response, Rate
 from pynamodb.exceptions import DoesNotExist
 
 from chalicelib import token
@@ -175,3 +175,17 @@ def create_table():
             return Response(body={'message': 'Success'}, headers=DEFAULT_HEADERS)
     except Exception as e:
         return Response(body={'message': e}, headers=DEFAULT_HEADERS, status_code=500)
+
+
+##############
+#  Schedule  #
+#############
+@app.schedule(Rate(12, unit=Rate.HOURS))
+def validate_tokens(event):
+    with Token.batch_write() as batch:
+        tokens = Token.scan()
+        for t in tokens:
+            if not token.is_valid_token(t.token):
+                t.valid = False
+                batch.save(t)
+    return "Success"
