@@ -2,3 +2,4 @@
 .chalice/deployments/
 .chalice/venv/
 .env
+tests/Results
